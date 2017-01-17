@@ -8,8 +8,8 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var ig = require('instagram-node').instagram();
 
-ig.use({ client_id: 'a7e3d7de332e471f85f8772c2637a7ea',
-         client_secret: ' e5c090fc3b774a9fb4d6266c53d72a66'});
+ig.use({ client_id: '7c6f8b01fc0843beabee429279fdac3c',
+         client_secret: 'c309e2647ecf4cb4b6daa1ea5814b456'});
 
 var redirect_uri = 'http://localhost:3000/handleauth';
 
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Express session
 app.use(session({
   secret: 'secret',
-  resave: false,
+  resave: true,
   saveUninitialized: true
 }));
 
@@ -38,9 +38,15 @@ app.use(session({
 app.use(flash());
 
 //Global variables
-app.use(require('connect-flash')());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
+
+  // if(req.session.accesstoken && req.session.accesstoken != 'undefined'){
+  //   res.locals.isLoggedIn = true;
+  // } else {
+  //   res.locals.isLoggedIn = false;
+  // }
+
   next();
 });
 
@@ -53,7 +59,7 @@ app.get('/', function(req, res){
 
 //Login Route
 app.get('/login', function(req, res){
-  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
+  res.redirect(ig.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 });
 
 //Handle Auth Route
@@ -65,12 +71,22 @@ app.get('/handleauth', function(req, res){
     } else {
       req.session.accesstoken = result.access_token;
       req.session.uid = result.user.id;
-
-      ig.use({
-        access_token: req.session.accesstoken
-      });
+      ig.use({access_token: req.session.accesstoken});
 
       res.redirect('/main');
+    }
+  });
+});
+
+//Main Route
+app.get('/main', function(req, res){
+  ig.user(req.session.uid, function(err, result, remaining, limit){
+    if(err){
+      res.send(err);
+    } else {
+      ig.user_self_feed({}, function(err, medias){
+        res.send(medias);
+      });
     }
   });
 });
