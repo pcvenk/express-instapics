@@ -2,6 +2,22 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/kickstart.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery-3.1.1.min.js')
+    script(src='/javascripts/kickstart.js')
+
   body
+    ul.menu
+      li
+        a(href='/') INSTAPICS
+      li
+        a(href='/login') Login with Instagram
+      li
+        a(href='/main') Main Feed
+      li
+        a(href='/me') My Images
+      li
+        a(href='/logout') Logout
+    .grid
     block content
