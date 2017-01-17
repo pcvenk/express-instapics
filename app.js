@@ -56,6 +56,25 @@ app.get('/login', function(req, res){
   res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 });
 
+//Handle Auth Route
+app.get('/handleauth', function(req, res){
+  ig.authorize_user(req.query.code, redirect_uri, function(err, result) {
+    if (err) {
+      console.log(err.body);
+      res.send("Didn't work");
+    } else {
+      req.session.accesstoken = result.access_token;
+      req.session.uid = result.user.id;
+
+      ig.use({
+        access_token: req.session.accesstoken
+      });
+
+      res.redirect('/main');
+    }
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
