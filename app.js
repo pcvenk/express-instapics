@@ -6,6 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+var ig = require('instagram-node').instagram();
+
+ig.use({ client_id: 'a7e3d7de332e471f85f8772c2637a7ea',
+         client_secret: ' e5c090fc3b774a9fb4d6266c53d72a66'});
+
+var redirect_uri = 'http://localhost:3000/handleauth';
 
 var app = express();
 
@@ -43,6 +49,11 @@ app.get('/', function(req, res){
   res.render('index', {
     title: 'InstaPics'
   })
+});
+
+//Login Route
+app.get('/login', function(req, res){
+  res.redirect(api.get_authorization_url(redirect_uri, { scope: ['likes'], state: 'a state' }));
 });
 
 // catch 404 and forward to error handler
