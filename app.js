@@ -84,8 +84,13 @@ app.get('/main', function(req, res){
     if(err){
       res.send(err);
     } else {
-      ig.user_self_feed({}, function(err, medias){
+      ig.user_self_feed(function(err, medias, pagination, remaining, limit){
         res.send(medias);
+        // res.render('main',{
+        //   title: 'Main Instagram Feed',
+        //   user: result,
+        //   medias: medias
+        // })
       });
     }
   });

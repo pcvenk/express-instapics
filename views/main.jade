@@ -1,0 +1,12 @@
+extends layout
+
+
+block content
+    .col_12
+        .col_9
+            h2=title
+                each media, i in medias
+                    .col_4
+                        a(href='#{media.images.low_resolution.url}')
+                            img(src='#{media.images.low_resolution.url}')
+                        small.meta Posted by: #{media.user.username} on #{media.created_time}
