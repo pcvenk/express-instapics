@@ -41,11 +41,11 @@ app.use(flash());
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
 
-  // if(req.session.accesstoken && req.session.accesstoken != 'undefined'){
-  //   res.locals.isLoggedIn = true;
-  // } else {
-  //   res.locals.isLoggedIn = false;
-  // }
+  if(req.session.accesstoken && req.session.accesstoken != 'undefined'){
+    res.locals.isLoggedIn = true;
+  } else {
+    res.locals.isLoggedIn = false;
+  }
 
   next();
 });
@@ -84,7 +84,7 @@ app.get('/main', function(req, res){
     if(err){
       res.send(err);
     } else {
-      ig.user_self_feed(function(err, medias, pagination, remaining, limit){
+      ig.user_self_feed([], function(err, medias, pagination, remaining, limit){
         res.send(medias);
         // res.render('main',{
         //   title: 'Main Instagram Feed',
