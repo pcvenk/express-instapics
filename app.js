@@ -8,8 +8,13 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var ig = require('instagram-node').instagram();
 
+//MY
 ig.use({ client_id: '7c6f8b01fc0843beabee429279fdac3c',
          client_secret: 'c309e2647ecf4cb4b6daa1ea5814b456'});
+
+//MAJAS
+// ig.use({ client_id: 'a4fd985040b54fec940d25ecd642f2c5',
+//   client_secret: '7daf636acdbc49cd835f306459df9b3c'});
 
 var redirect_uri = 'http://localhost:3000/handleauth';
 
@@ -84,12 +89,12 @@ app.get('/main', function(req, res){
     if(err){
       res.send(err);
     } else {
-      ig.user_self_feed([], function(err, medias, pagination, remaining, limit){
+      ig.user_self_feed({}, function(err, medias, pagination, remaining, limit){
         res.send(medias);
         // res.render('main',{
-        //   title: 'Main Instagram Feed',
-        //   user: result,
-        //   medias: medias
+          // title: 'Main Instagram Feed',
+          // user: result,
+          // medias: medias
         // })
       });
     }
