@@ -9,7 +9,7 @@ block content
                     .col_4
                         a(href='#{media.images.low_resolution.url}')
                             img(src="#{media.images.low_resolution.url}")
-                        small.meta Posted By: #{media.user.username} on #{media.created_time}
+                        small.meta Posted By: #{media.user.username} on #{formatDate(media.created_time)}
             else
                 p Please login to view feed
         .col_3

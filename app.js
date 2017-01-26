@@ -45,6 +45,13 @@ app.use(flash());
 //Global variables
 app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
+  res.locals.moment = require('moment');
+
+  //date format function
+  res.locals.formatDate = function(date){
+    var myDate = new Date(date *1000);
+    return myDate.toLocaleString();
+  };
 
   if(req.session.accesstoken && req.session.accesstoken != 'undefined'){
     res.locals.isLoggedIn = true;
@@ -78,7 +85,7 @@ app.get('/handleauth', function(req, res){
       req.session.uid = result.user.id;
       ig.use({access_token: req.session.accesstoken});
 
-      res.redirect('/main');
+      res.redirect('/me');
     }
   });
 });
@@ -89,7 +96,7 @@ app.get('/main', function(req, res){
     if(err){
       res.send(err);
     } else {
-      ig.user_self_feed({}, function(err, medias, pagination, remaining, limit){
+      ig.user_self_media_recent({}, function(err, medias){
         // res.send(medias);
         res.render('main',{
           title: 'Main Instagram Feed',
@@ -105,9 +112,10 @@ app.get('/main', function(req, res){
 app.get('/me', function(req, res){
   ig.user(req.session.uid, function(err, result, remaining, limit){
     if(err){
-      res.send(err)
+      res.send(err);
     } else {
       ig.user_self_media_recent({}, function(err, medias){
+        // res.send(medias);
         res.render('main', {
           title: 'My Recent Images',
           user: result,
