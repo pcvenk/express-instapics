@@ -90,15 +90,32 @@ app.get('/main', function(req, res){
       res.send(err);
     } else {
       ig.user_self_feed({}, function(err, medias, pagination, remaining, limit){
-        res.send(medias);
-        // res.render('main',{
-          // title: 'Main Instagram Feed',
-          // user: result,
-          // medias: medias
-        // })
+        // res.send(medias);
+        res.render('main',{
+          title: 'Main Instagram Feed',
+          user: result,
+          medias: medias
+        })
       });
     }
   });
+});
+
+//Users Image Route
+app.get('/me', function(req, res){
+  ig.user(req.session.uid, function(err, result, remaining, limit){
+    if(err){
+      res.send(err)
+    } else {
+      ig.user_self_media_recent({}, function(err, medias){
+        res.render('main', {
+          title: 'My Recent Images',
+          user: result,
+          medias: medias
+        })
+      })
+    }
+  })
 });
 
 // catch 404 and forward to error handler
