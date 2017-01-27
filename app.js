@@ -130,7 +130,6 @@ app.get('/me', function(req, res){
 app.get('/logout', function(req, res){
   req.session.access_token = false;
   req.session.uid = false;
-
   res.redirect('/');
 });
 

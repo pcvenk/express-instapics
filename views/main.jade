@@ -7,7 +7,7 @@ block content
                 h2=title
                 each media, i in medias
                     .col_4
-                        a(href='#{media.images.low_resolution.url}')
+                        a(href='#{media.images.low_resolution.url}' data-lightbox='image-set')
                             img(src="#{media.images.low_resolution.url}")
                         small.meta Posted By: #{media.user.username} on #{formatDate(media.created_time)}
             else
